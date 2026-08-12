@@ -4198,22 +4198,32 @@
             dados.append('_template', 'box');
             dados.append('attachment', csvArquivo);
 
-            fetch('https://formsubmit.co/ajax/' + encodeURIComponent(destinatario), {
+            // IMPORTANTE: o endpoint "/ajax/" do FormSubmit retorna JSON,
+            // mas IGNORA anexos de arquivo. Só o endpoint "normal" (sem
+            // "/ajax/") processa o anexo — ele foi feito para <form>s
+            // comuns, que normalmente navegam para uma página de
+            // agradecimento ao enviar. Como usamos fetch() em vez de um
+            // <form> de verdade, a página NUNCA navega sozinha (fetch não
+            // navega), então dá pra usar esse endpoint sem perder o
+            // comportamento de "enviar sem recarregar a página" — só não dá
+            // pra ler a resposta como JSON (ela vem em HTML), então
+            // confiamos no status da resposta (resposta.ok) para saber se
+            // deu certo.
+            fetch('https://formsubmit.co/' + encodeURIComponent(destinatario), {
                 method: 'POST',
-                headers: { 'Accept': 'application/json' },
+                redirect: 'manual', // FormSubmit redireciona para uma página de "obrigado" após aceitar o envio; não seguimos esse redirecionamento (não precisamos dele), só usamos o fato de ele ocorrer como sinal de sucesso.
                 body: dados
             })
             .then(function(resposta) {
-                return resposta.json().then(function(json) {
-                    return { ok: resposta.ok, json: json };
-                });
-            })
-            .then(function(resultado) {
-                if (resultado.ok) {
+                // Com redirect:'manual', uma resposta bem-sucedida do
+                // FormSubmit chega como "opaqueredirect" (status 0, sem
+                // conteúdo legível por causa do CORS) — isso É o sinal de
+                // sucesso, não de falha.
+                if (resposta.ok || resposta.type === 'opaqueredirect') {
                     aoTerminar(true);
                 } else {
-                    console.error('Falha ao enviar e-mail via FormSubmit:', resultado.json);
-                    aoTerminar(false, resultado.json);
+                    console.error('Falha ao enviar e-mail via FormSubmit. Status:', resposta.status);
+                    aoTerminar(false, resposta.status);
                 }
             })
             .catch(function(erro) {
