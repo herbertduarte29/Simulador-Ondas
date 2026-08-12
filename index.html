@@ -1501,7 +1501,7 @@
                                 <p id="relatorio-status" class="relatorio-status"></p>
 
                                 <div class="relatorio-envio-aluno">
-                                    <label for="input-email-aluno">Enviar relatório para o seu e-mail:</label>
+                                    <label for="input-email-aluno">Enviar relatório para o seu e-mail (opcional):</label>
                                     <div class="relatorio-envio-linha">
                                         <input type="email" id="input-email-aluno" placeholder="seuemail@exemplo.com">
                                         <button id="btn-enviar-aluno" class="btn-relatorio-secundario">✉️ Enviar</button>
@@ -4277,7 +4277,7 @@
                 if (sucesso) {
                     relatorioEnviadoProfessor = true;
                     statusEl.style.color = '#4ade80';
-                    statusEl.textContent = '✅ Relatório enviado com sucesso para ' + EMAIL_PROFESSOR + '! (Se for a primeiríssima vez usando este e-mail com o FormSubmit, ele recebeu um e-mail de CONFIRMAÇÃO em vez do relatório — é só clicar no link uma vez, e os próximos envios chegam normalmente.)';
+                    statusEl.textContent = '✅ Relatório enviado com sucesso para ' + EMAIL_PROFESSOR;
                 } else {
                     statusEl.style.color = '#f87171';
                     statusEl.textContent = '❌ Não foi possível enviar o e-mail automaticamente. Tente novamente ou baixe o CSV abaixo.';
@@ -4310,7 +4310,7 @@
                 btnEnviarAluno.style.opacity = '1';
                 if (sucesso) {
                     statusAlunoEl.style.color = '#4ade80';
-                    statusAlunoEl.textContent = '✅ Relatório enviado com sucesso para ' + email + '! Se for a primeira vez usando esse e-mail, ele pode ter recebido um e-mail de CONFIRMAÇÃO em vez do relatório — é só clicar no link uma vez, e os próximos envios chegarão normalmente.';
+                    statusAlunoEl.textContent = '✅ Relatório enviado com sucesso para ' + email;
                 } else {
                     statusAlunoEl.style.color = '#f87171';
                     statusAlunoEl.textContent = '❌ Não foi possível enviar para esse e-mail. Verifique se digitou corretamente e tente novamente.';
